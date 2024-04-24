@@ -1,0 +1,37 @@
+Explicação das Funções do SMPL:
+rand.c: Este arquivo lida com a geração de números aleatórios para a simulação. Ele contém funções como:
+ranf(): Gera um número aleatório uniforme entre 0 e 1.
+stream(n): Seleciona o fluxo de números aleatórios a ser usado (entre 1 e 15).
+seed(Ik, n): Define a semente para o fluxo de números aleatórios especificado.
+uniform(a, b): Gera um número aleatório uniforme entre a e b.
+Outras funções: Geram números aleatórios com diferentes distribuições (exponencial, erlang, etc.).
+
+
+smpl.c e smpl.h: Estes arquivos contêm o núcleo do sistema de simulação SMPL. Eles definem estruturas de dados e funções para:
+
+smpl(m, s): Inicializa o sistema de simulação com o nome do modelo e o modo de monitoramento.
+reset(): Reinicia as medidas da simulação.
+schedule(ev, te, tkn): Agenda um evento para ocorrer após um determinado tempo.
+cause(&ev, &tkn): Executa o próximo evento agendado.
+cancel(ev): Cancela um evento agendado.
+facility(s, n): Define um recurso com um nome e número de servidores.
+request(f, tkn, pri): Solicita um recurso para um token com uma prioridade.
+release(f, tkn): Libera um recurso que foi solicitado por um token.
+status(f): Verifica se um recurso está ocupado ou livre.
+
+Outras funções: Lida com gerenciamento de filas, rastreamento de eventos, relatórios e outras funcionalidades do sistema.
+
+tempo.c:
+Este arquivo é um exemplo de um programa de simulação que usa o SMPL. Ele simula um sistema com N nós, onde cada nó testa periodicamente e pode falhar e se recuperar.
+Estrutura de Dados dos Nós:
+A estrutura que armazena os nós no programa "tempo.c" é chamada TipoProcesso. Ela está definida no arquivo tempo.c da seguinte forma:
+
+typedef struct {
+  int id;     // identificador de facility SMPL
+  // variáveis locais do processo são declaradas aqui 
+} TipoProcesso;
+
+Cada nó é representado por uma instância da estrutura TipoProcesso. O campo id armazena o identificador do recurso SMPL associado ao nó. Você pode adicionar outros campos a esta estrutura para armazenar informações adicionais sobre cada nó, dependendo das necessidades da sua simulação.
+Observação: A estrutura TipoProcesso é específica para o programa "tempo.c". Em outras simulações que usam SMPL, você pode precisar definir diferentes estruturas de dados para representar os elementos do seu modelo.
+
+
