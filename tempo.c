@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
       r,
       i,
       N_reverso,
-      j;
+      j,
+      tempo;
 
   static char fa_name[5];
 
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
     processo[i].testado_por = -1;
     processo[i].tempo = 0.0;
     processo[i].status = -1;
-    // printf("fa_name = %s, processo[%d].id = %d\n", fa_name, i, processo[i].id);
+    // printf("processo[%d] = %d\n",processo[i].id);
   } /* end for */
 
   /*------ Incializa status dos processos --------*/
@@ -76,11 +77,7 @@ int main(int argc, char *argv[])
     
     // status = 0 (correto)
     // status != 0 (falho)
-    if(i == 1)
-      processo[i].status = 1;
-    else  
-      processo[i].status = 0;
-
+    processo[i].status = 0;
   } /* end for */
 
 
@@ -88,53 +85,59 @@ int main(int argc, char *argv[])
 
   for (i = 0; i < N; i++)
   {
-    schedule(test, 30.0+(i*2), i);
+    tempo = i*2;
+    schedule(test, 30.0+tempo, i);
   }
   // schedule(fault, 31.0, 1);
   // schedule(recovery, 61.0, 1);
 
   /*----- agora vem o loop principal do simulador -----*/
   j = 1;
-  while (time() < 40.0)
+  while (time() < (30.0+tempo))
   {
     cause(&event, &token);
     // printf("%d",token);
-    token_analise = token;
+    token_analise = token-1;
     switch (event)
     {
     case test:
-      printf("processo %d, status: %d\n", token, processo[token].status);
+      // printf("processo %d\n", token);
       if (processo[token].status != 0)
         break; // processo falho não testa!
       else 
-        while ((token_analise < N-1) && (processo[token_analise+j].status != 0)){
-          token_analise = token_analise+j;
-          j++;
-        }
-        printf("1 while %d\n", token_analise);
-        j = 1; // reset da variável j;
-        if(token == token_analise){
-          token_analise = token_analise -1;
-          while ((token_analise > 0) && (processo[token_analise -j].status == 0)){
-            token_analise = token_analise-j;
+        if (token == 0)
+        {
+
+          while (N > j)
+          {
+            if (processo[N_reverso-1].status == 0)
+            {
+              processo[token].testado_por = processo[N_reverso-1].id;
+              printf("processo %d, testado por processo %d no tempo %5.1f\n", token, N_reverso-1, time());
+              j=N;
+            }else{
+              N_reverso--;
+            }
             j++;
           }
-          j = 1; // reset da variável j;
-        }
-        if(token == 0){
-          while ((N_reverso > 0) && (processo[N_reverso -j].status == 0)){
-            N_reverso = N_reverso-j;
-            j++;
-          }
-          j = 1;
-          processo[token].testado_por = processo[N_reverso].id;
-          processo[token].tempo = time();
-          printf("processo %d testado por %d, no tempo %5.1f\n", token, N_reverso, processo[token].tempo);
+          j=1;
+          
         }else{
-          processo[token_analise].testado_por = processo[token].id;
-          processo[token_analise].tempo = time();
-          printf("processo %d testado por %d, no tempo %5.1f\n", token_analise, token, processo[token_analise].tempo);
+          while (j < N)
+          {
+            // printf("entrei aqui");
+            if(processo[token_analise].status == 0){
+              processo[token].testado_por = processo[token_analise].id;
+              printf("processo %d, testado por processo %d no tempo %5.1f\n", token, token_analise, time());
+              j = N;
+            }else{
+              token_analise++;
+            }
+            j++;
+          }
+          j=1;
         }
+        
       schedule(test, 30.0, token);
       break;
     case fault:
@@ -148,4 +151,6 @@ int main(int argc, char *argv[])
       break;
     } /* end switch */
   }   /* end while */
+
+  free(processo);
 } /* end tempo.c */
