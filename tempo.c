@@ -20,10 +20,12 @@
 typedef struct
 {
   int id; /* identificador de facility SMPL */
+  
+  /* vari�veis locais do processo s�o declaradas aqui */
   int testado_por;
   float tempo;
   int status;
-  /* vari�veis locais do processo s�o declaradas aqui */
+  int *state;
 } TipoProcesso;
 
 TipoProcesso *processo;
@@ -42,6 +44,8 @@ int main(int argc, char *argv[])
 
   static char fa_name[5];
 
+
+
   if (argc != 2)
   {
     puts("Uso correto: tempo <num-processos>");
@@ -57,6 +61,7 @@ int main(int argc, char *argv[])
   /*----- inicializacao -----*/
 
   processo = (TipoProcesso *)malloc(sizeof(TipoProcesso) * N);
+  
 
   for (i = 0; i < N; i++)
   {
@@ -66,6 +71,11 @@ int main(int argc, char *argv[])
     processo[i].testado_por = -1;
     processo[i].tempo = 0.0;
     processo[i].status = -1;
+    processo[i].state = (int *)malloc(sizeof(int) * N);
+    for (int k = 0; k < N; k++)
+    {
+      processo[i].state[k] = -1;
+    }
     // printf("processo[%d] = %d\n",processo[i].id);
   } /* end for */
 
@@ -114,6 +124,7 @@ int main(int argc, char *argv[])
             {
               processo[token].testado_por = processo[N_reverso-1].id;
               printf("processo %d, testado por processo %d no tempo %5.1f\n", token, N_reverso-1, time());
+              // atualizar o estado
               j=N;
             }else{
               N_reverso--;
@@ -129,6 +140,7 @@ int main(int argc, char *argv[])
             if(processo[token_analise].status == 0){
               processo[token].testado_por = processo[token_analise].id;
               printf("processo %d, testado por processo %d no tempo %5.1f\n", token, token_analise, time());
+              // atualizar o estado
               j = N;
             }else{
               token_analise++;
@@ -150,7 +162,11 @@ int main(int argc, char *argv[])
       printf("o processo %d recuperou no tempo %5.1f\n", token, time());
       break;
     } /* end switch */
+
+    // printar todos os estados dos processos.
   }   /* end while */
 
+  // free(processo->state);
   free(processo);
+
 } /* end tempo.c */
