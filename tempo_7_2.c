@@ -199,13 +199,13 @@ int main(int argc, char *argv[])
             break;
         } /* end switch */
 
-        printf("Vetor: State[ ");
-        for (int k = 0; k < N; k++)
-        {
-            printf("%d ", processo[token].state[k]);
-        }
-        printf("]");
-        printf("\n");
+        // printf("Vetor: State[ ");
+        // for (int k = 0; k < N; k++)
+        // {
+        //     printf("%d ", processo[token].state[k]);
+        // }'
+        // printf("]");
+        // printf("\n");
 
     } /* end while */
 
