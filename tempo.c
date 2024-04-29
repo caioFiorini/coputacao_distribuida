@@ -154,18 +154,22 @@ int main(int argc, char *argv[])
                     // printf("entrei aqui");
                     if (processo[token_analise].status == 0)
                     {
-                        // um processo testa o outro
+                        // um processo testa o outro;
                         processo[token].testado_por = processo[token_analise].id;
-                        // em primeiro momento atualiza o processo.
+                        
+                        // atualiza o estado do processo;
+                        processo[token].state[token] = processo[token].status;
+
                         for (int k = 0; k < N; k++)
                         {
                             // printf("Passei aqui2\n");
-                            // printf("1 Estado do processo[N_reverso - 1].[%d] = %d &&  Estado do processo[token].[%d] = %d\n", k, processo[N_reverso-1].state[k], k, processo[token].state[k]);
-                            if (((processo[N_reverso-1].state[k] == -1) && (processo[token].state[k] == 0)) || 
-                            ((processo[token].state[k] == -1) && (processo[N_reverso-1].state[k] == 0)))
+                            // printf("1 Estado do processo[token_analise].[%d] = %d\n", k, processo[token_analise].state[k]);
+                            // printf("1 Estado do processo[token].[%d] = %d\n", k, processo[token].state[k]);
+                            if (((processo[token_analise].state[k] == -1) && (processo[token].state[k] == 0)) || 
+                            ((processo[token].state[k] == -1) && (processo[token_analise].state[k] == 0)))
                             {
                                 processo[token_analise].state[k] = processo[token].state[k];
-                                // printf("2 Estado do processo[N_reverso - 1].[%d] = %d &&  Estado do processo[token].[%d] = %d\n", k, processo[N_reverso-1].state[k], k, processo[token].state[k]);
+                                // printf("2 Estado do processo[N_reverso - 1].[%d] = %d &&  Estado do processo[token].[%d] = %d\n", k, processo[token_analise].state[k], k, processo[token].state[k]);
                             }
                             
                         }
@@ -195,7 +199,7 @@ int main(int argc, char *argv[])
             break;
         } /* end switch */
 
-        printf("Processo %d, vetor: State[ ", token);
+        printf("Vetor: State[ ");
         for (int k = 0; k < N; k++)
         {
             printf("%d ", processo[token].state[k]);
