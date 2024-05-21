@@ -5,7 +5,6 @@
 #include <vector>
 class Sistema{
     public:
-        
         vector<Processo> processos;
         vector<Processo> suspeitos;
         vector<Processo> corretos;
@@ -15,6 +14,7 @@ class Sistema{
         int define_status(int processo, int novo_status);
         void consenso();
         void oraculo();
+        void print_processos();
 };
 
 

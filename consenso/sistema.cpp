@@ -31,3 +31,11 @@ void Sistema::oraculo(){
         }
     }
 }
+
+void Sistema::print_processos(){
+    for (int i = 0; i < processos.size(); i++)
+    {   
+        cout << "Processo: " << i << endl;
+        cout << "Status: " << processos[i].status << endl;
+    }
+}
