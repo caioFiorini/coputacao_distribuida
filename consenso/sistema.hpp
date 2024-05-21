@@ -11,10 +11,11 @@ class Sistema{
         vector<Processo> falhos;
         Sistema();
         Sistema(int num_processos);
-        int define_status(int processo, int novo_status);
-        void consenso();
+        void valida_consenso();
         void oraculo();
         void print_processos();
+        void print_suspeitos();
+        void print_falhos();
 };
 
 
