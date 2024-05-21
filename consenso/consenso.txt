@@ -1,0 +1,17 @@
+Ideias para o aplicador de consenso e detector de erros:
+
+No fial todos os processos decidem por um consenso, podemos criar uma classe processo, onde teremos 
+um consenso que sera uma função randInt(), onde ela irá decidir por 0 ou 1, e no final quem tiver 
+mais todos recebem o consenso da maioria
+
+Todo processo válido decide um valor;
+
+O detector de falhas entrega uma lista de suspeitos de falharem
+
+a função pode se chamar oraculo();
+
+A ideia é simples, todos os processos que não participarem do consenso iremos colocar em uma lista 
+de suspeitos, pois o consenso ele pode ser causado por fatores como atraso na rede ou dados desatuali-
+zados, então ajuda a saber quais processos devem estar sendo monitorados. 
+
+ 
